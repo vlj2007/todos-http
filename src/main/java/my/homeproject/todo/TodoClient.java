@@ -20,8 +20,9 @@ public class TodoClient {
     private final HttpClient client;
     private final ObjectMapper objectMapper;
 
-    /***
-     * Клиент для вызова других сервисов
+    /**
+     * Конструктор - создание нового объекта клиента
+     * @see TodoClient#TodoClient()
      */
 
     public TodoClient() {
@@ -30,7 +31,7 @@ public class TodoClient {
     }
 
     /***
-     * Метод для списка всех задач в системе, возвращает строку данных
+     * Метод для списка всех задач в системе, возвращает всю строку данных
      */
 
     public List<Todo> findAll() throws IOException, InterruptedException {
@@ -43,6 +44,46 @@ public class TodoClient {
         return objectMapper.readValue(response.body(), new TypeReference<>() {}) ;
     }
 
+    /***
+     * Метод для списка всех задач в системе, возвращает строку данных по Id
+     */
 
+    public Todo findById(int i) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + i))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), Todo.class);
+    }
+
+    /***
+     * Метод для списка всех задач в системе, возвращает строку данных по Title
+     */
+
+    public Todo findByTitle(String i) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + i))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), Todo.class);
+    }
+
+    /***
+     * Метод для списка всех задач в системе, возвращает строку данных по Completed
+     */
+
+    public Todo findByCompleted(Boolean i) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/" + i))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        return objectMapper.readValue(response.body(), Todo.class);
+    }
 
 }
